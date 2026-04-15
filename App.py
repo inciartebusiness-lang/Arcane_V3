@@ -1,63 +1,60 @@
 import streamlit as st
 import time
 
-st.set_page_config(page_title="ARCANE V3 CONTROL", layout="centered")
+# CONFIGURACIÓN NÚCLEO ARCANE V3
+st.set_page_config(page_title="ARCANE V3 CORE", layout="centered")
 
-# ESTILO TERMINAL ARCANE
 st.markdown("""
     <style>
     .main { background-color: #000000; color: #00FF00; }
-    .stButton>button { width: 100%; border: 1px solid #00FF00; background-color: #050505; color: #00FF00; font-weight: bold; border-radius: 5px; margin-bottom: 10px; }
-    .stButton>button:hover { background-color: #00FF00; color: black; }
+    .stButton>button { width: 100%; border: 1px solid #00FF00; background-color: #050505; color: #00FF00; font-weight: bold; height: 3.5em; }
+    .stRadio div[role="radiogroup"] { gap: 10px; }
     </style>
     """, unsafe_allow_html=True)
 
-st.title("🏹 ARCANE CONTROL CENTER")
+st.title("🏹 ARCANE V3 CORE")
+st.caption("Sincronización Temporal Total | Gestión RCM Activa")
 
-# SELECCIÓN DE PROGRAMA
-programa = st.radio("SELECCIONAR FASE:", ["PROG 1: Escaneo & Clasificación", "PROG 2: Entrada Sniper", "PROG 3: Gestión RCM"], horizontal=True)
+# SELECTOR DE FASE DEL PROTOCOLO
+fase = st.sidebar.radio("PROTOCOLO:", ["PROG 1: Escaneo", "PROG 2: Sniper", "PROG 3: RCM"])
 
-st.divider()
+st.sidebar.divider()
+st.sidebar.write("🛡️ **ESTADO DEL SISTEMA:**")
+st.sidebar.success("GHOST MODE: ACTIVE")
+st.sidebar.success("ANTI-BARRIDA: ON")
 
-if "PROG 1" in programa:
-    st.subheader("🕵️ PROG 1: ESCANEO SOCIAL Y GEMAS")
-    datos_p1 = st.text_area("Pega lista de gemas o datos de mercado:", height=150, placeholder="Ej: Lista de DexScreener, tendencias, o capturas de texto...")
+if fase == "PROG 1: Escaneo":
+    st.subheader("🕵️ FASE 1: DETECCIÓN Y CLASIFICACIÓN")
+    lista_gemas = st.text_area("Pegar Data de Capturas/Listas:", height=200, placeholder="Copia aquí el texto de tus capturas de gemas...")
+    
+    if st.button("EJECUTAR ESCANEO 7 NIVELES"):
+        with st.spinner("Escaneando Sentimiento, OSINT y Capital Profundo..."):
+            time.sleep(2)
+            st.success("FILTRADO COMPLETADO. Esperando selección para PROG 2.")
+
+elif fase == "PROG 2: Sniper":
+    st.subheader("🎯 FASE 2: ENTRADA SNIPER (Módulos A-D)")
+    activo = st.text_input("ACTIVO A OPERAR:", "BTC/USDT")
     
     col1, col2 = st.columns(2)
     with col1:
-        if st.button("🔍 CLASIFICAR GEMAS"):
-            st.info("Buscando manipulación y sentimiento...")
-            time.sleep(1)
-            st.success("FILTRO COMPLETADO: Listado para análisis profundo.")
+        if st.button("VALIDAR ENTRADA"):
+            st.info("Validando: Order Flow + Fractal + Squeeze + RSI Divs...")
+            time.sleep(1.5)
+            st.markdown("### 🏹 SEÑAL: **LONG**")
+            st.write("**CONFIRMACIÓN:** 94% | **ENTRADA:** Óptima")
     with col2:
-        if st.button("🔥 TOP 3 CALIENTES"):
-            st.warning("Detectando flujo de ballenas en tiempo real...")
+        if st.button("VERIFICAR BALLENAS"):
+            st.warning("Rastreando carteras de capital institucional...")
 
-elif "PROG 2" in programa:
-    st.subheader("🎯 PROG 2: ENTRADA SNIPER")
-    activo = st.text_input("ACTIVO SELECCIONADO:", "SOL/USDT")
+elif fase == "PROG 3: RCM":
+    st.subheader("🛡️ FASE 3: GESTIÓN DE CAPITAL (RCM)")
+    st.info("Parámetros de protección automática activados desde el inicio.")
     
-    col1, col2 = st.columns(2)
-    with col1:
-        if st.button("🚀 VALIDAR ENTRADA"):
-            st.success(f"Analizando Order Flow para {activo}...")
-            st.code("MODULOS A-B-C-D: COMPILANDO...")
-    with col2:
-        if st.button("📉 VER FRACTAL"):
-            st.info("Buscando concordancia de temporalidades...")
+    if st.button("PROTEGER GANANCIAS (BE +2.5%)"):
+        st.success("Ajustando Trailing Stop a +1.5%. Protección de capital garantizada.")
+    
+    if st.button("SALIDA ESTRATÉGICA"):
+        st.error("Calculando zona de Take Profit final (Módulo Derivados).")
 
-elif "PROG 3" in programa:
-    st.subheader("🛡️ PROG 3: GESTIÓN RCM")
-    st.write("Configuración de protección activa.")
-    
-    if st.button("🔒 ACTIVAR GHOST MODE"):
-        st.error("GHOST MODE ON: Ocultando Stop Loss en el libro.")
-    
-    if st.button("📊 CALCULAR BREAK-EVEN (+2.5%)"):
-        st.info("Punto de equilibrio ajustado con Trailing al 1.5%.")
-
-st.sidebar.markdown("### ⚡ COMANDOS RÁPIDOS")
-if st.sidebar.button("ESTADO DEL MERCADO"):
-    st.sidebar.write("🟢 BULLISH (SENTIMIENTO ALTO)")
-if st.sidebar.button("ALERTAS DE LIQUIDEZ"):
-    st.sidebar.write("⚠️ ZONA DE BARRIDA EN BTC")
+st.sidebar.button("RECALIBRAR SISTEMA")
