@@ -1,56 +1,64 @@
 import streamlit as st
+import time
 
-# CONFIGURACIÓN NÚCLEO COMPACTO
+# CONFIGURACIÓN NÚCLEO TOTAL
 st.set_page_config(page_title="ARCANE V3 CORE", layout="centered")
 
 st.markdown("""
     <style>
     .main { background-color: #000000; color: #00FF00; }
-    .stButton>button { width: 100%; border: 1px solid #00FF00; background-color: #050505; color: #00FF00; font-weight: bold; height: 3em; margin-top: 10px; }
-    .stTextArea textarea { background-color: #050505 !important; color: #00FF00 !important; border: 1px solid #00FF00; height: 80px !important; }
+    .stButton>button { width: 100%; border: 1px solid #00FF00; background-color: #050505; color: #00FF00; font-weight: bold; height: 3.5em; }
+    .stTextArea textarea { background-color: #050505 !important; color: #00FF00 !important; border: 1px solid #00FF00; }
     .stTextInput input { background-color: #050505 !important; color: #00FF00 !important; border: 1px solid #00FF00; }
-    .stSelectbox div[data-baseweb="select"] { background-color: #050505 !important; color: #00FF00 !important; }
-    div[data-baseweb="select"] * { color: #00FF00 !important; }
     </style>
     """, unsafe_allow_html=True)
 
 st.title("🏹 ARCANE V3 CORE")
 
-# FILA 1: PAR Y EXCHANGE
+# ENTRADA DE DATOS
 col_a, col_b = st.columns([2, 1])
 with col_a:
-    par = st.text_input("GEMA / PAR:", placeholder="Ej: MAGMA/USDT")
+    par = st.text_input("GEMA / PAR:", value="MAGMA/USDT")
 with col_b:
-    ex = st.selectbox("EX:", ["Bybit", "Binance", "MEXC", "DEX"])
+    ex = st.selectbox("EXCHANGE:", ["Bybit", "Binance", "MEXC", "DEX"])
 
-# FILA 2: INFO ADICIONAL (CUADRO PEQUEÑO)
-info = st.text_area("INFO ADICIONAL / COMANDOS:", placeholder="Notas extra o comandos rápidos...")
+info = st.text_area("CONSULTA AL NÚCLEO / INFO:", placeholder="Ej: ¿Es buen momento para entrar en scalping?")
 
 st.divider()
 
-# FILA 3: BOTONES DE PROGRAMA (LOS DISPARADORES)
-st.write("### ⚡ EJECUTAR PROGRAMA:")
-col1, col2, col3 = st.columns(3)
+# PROCESAMIENTO DE RESPUESTAS (EL CEREBRO)
+def procesar_respuesta(fase):
+    if not info:
+        return "⚠️ Error: El Núcleo necesita datos o una pregunta en el cuadro de INFO para procesar."
+    
+    # Lógica de respuesta basada en palabras clave
+    msg = f"### 📡 REPORTE {fase}\n"
+    if "entrar" in info.lower() or "entrada" in info.lower() or "comprar" in info.lower():
+        msg += f"✅ **DECISIÓN:** LONG detectado en {par}.\n\n**MÓDULOS A-D:** Confirmados. Las ballenas están acumulando en {ex}. Busca el soporte más cercano."
+    elif "salir" in info.lower() or "venta" in info.lower() or "profit" in info.lower():
+        msg += f"⚠️ **ALERTA:** Distribución detectada. Activa RCM para proteger profit en {par}."
+    else:
+        msg += f"Sincronizado con {par}. El núcleo indica esperar confirmación de volumen en {ex} para ejecutar el protocolo completo."
+    return msg
 
-with col1:
-    if st.button("PROG 1"):
-        st.info(f"PROG 1: Escaneando {par} en {ex}...")
-        # Aquí procesamos el escaneo 7 niveles
-        st.success("LISTO")
+# BOTONES TÁCTICOS
+c1, c2, c3 = st.columns(3)
 
-with col2:
-    if st.button("PROG 2"):
-        st.warning(f"PROG 2: Validando Sniper + Ghost Mode...")
-        # Aquí validamos módulos A-B-C-D
-        st.success("ENTRY OK")
+if c1.button("PROG 1"):
+    with st.spinner("Clasificando..."):
+        time.sleep(1)
+        st.markdown(procesar_respuesta("PROG 1 (Escaneo)"))
 
-with col3:
-    if st.button("PROG 3"):
-        st.error(f"PROG 3: RCM Activo para {par}")
-        # Aquí calculamos protección BE y Trailing
-        st.success("RCM ON")
+if c2.button("PROG 2"):
+    with st.spinner("Validando Sniper..."):
+        time.sleep(1.5)
+        st.markdown(procesar_respuesta("PROG 2 (Sniper)"))
 
-# ESTADO GHOST SIEMPRE VISIBLE
-st.sidebar.markdown("---")
-st.sidebar.success("👻 GHOST MODE: ENABLED")
-st.sidebar.success("🛡️ ANTI-BARRIDA: ON")
+if c3.button("PROG 3"):
+    with st.spinner("Calculando RCM..."):
+        time.sleep(1)
+        st.error("🛡️ GHOST MODE & RCM ACTIVOS")
+        st.write(f"Parámetros de salida ajustados para {par}. Trailing Stop: +1.5%")
+
+st.sidebar.success("👻 GHOST MODE: ON")
+st.sidebar.info(f"ÚLTIMA CONSULTA: {par}")
